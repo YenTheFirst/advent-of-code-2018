@@ -1,0 +1,6 @@
+[package]
+name = "day_08a"
+version = "0.1.0"
+authors = ["Talin Salway <talin@opendoor.com>"]
+
+[dependencies]
