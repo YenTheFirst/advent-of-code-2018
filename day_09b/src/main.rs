@@ -1,5 +1,5 @@
 use std::env::args;
-use std::collections::LinkedList;
+use std::collections::VecDeque;
 
 fn main() {
     let mut a = args();
@@ -8,7 +8,7 @@ fn main() {
     let num_marble = a.next().unwrap().parse::<usize>().unwrap();
 
     let mut player_score = vec![0; num_players];
-    let mut board = LinkedList::new();
+    let mut board = VecDeque::new();
     board.push_front(0);
 
     for marble in 1..num_marble+1 {
