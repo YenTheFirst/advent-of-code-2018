@@ -1,0 +1,59 @@
+#ip 3
+
+
+ 0: addi 3 16 3     ;ip = ip + 16
+
+ 'main
+ 1: seti 1 5 2      ;r2 = 1
+ 'outer
+ 2: seti 1 5 4      ;r4 = 1
+ 'inner
+ 3: mulr 2 4 1      ;r1 = r2 * r4
+ 4: eqrr 1 5 1      ;r1 = (r1 == r5)
+ 5: addr 1 3 3      ;ip += r1; [r1 != r5 ->6->8, r1 == r5 ->7] [if r1==r5; r0 += r2]
+ 6: addi 3 1 3      ;ip += 1
+    7: addr 2 0 0      ;r0 += r2
+ 8: addi 4 1 4      ;r4 += 1
+ 9: gtrr 4 5 1      ;r1 = r4 > r5
+10: addr 3 1 3      ;ip += r1 [<= -> 11, > -> 12] [if r4 > r5 break]
+11: seti 2 7 3      ;ip = 2 (->inner)
+
+12: addi 2 1 2      ;r2 += 1
+13: gtrr 2 5 1      ;r1 = (r2 > r5)
+14: addr 1 3 3      ;r3 += r1 [if r2 <= r5, 'outer, r2 > r5, 'thingy]
+15: seti 1 4 3      ;r3 = 1 (->outer)
+
+'thingy
+16: mulr 3 3 3      ;ip = ip*ip ;halt
+17: addi 5 2 5      ;r5 += 2
+18: mulr 5 5 5      ;r5 = r5*r5
+19: mulr 3 5 5      ;r5 = r5*ip -> r5*19
+20: muli 5 11 5     ;r5 = r5*11
+21: addi 1 3 1      ;r1 += 3
+22: mulr 1 3 1      ;r1 *= ip -> r1 *= 22
+23: addi 1 12 1     ;r1 += 12
+24: addr 5 1 5      ;r5 += r1
+25: addr 3 0 3      ;r3 += r0
+26: seti 0 5 3
+27: setr 3 4 1      ;r1 = r3; r1=27
+28: mulr 1 3 1      ;r1 *= r3 -> r1 *=28
+29: addr 3 1 1      ;r1 += r3 -> r1 += 29
+30: mulr 3 1 1      ;r1 *= 30
+31: muli 1 14 1     ;r1 *= 14
+32: mulr 1 3 1      ;r1 *= 32
+33: addr 5 1 5      ;r5 += r1
+34: seti 0 9 0      ;r0 = 0
+35: seti 0 4 3      ;ip = 0 ('main)
+
+r5 = 10551314
+r2 = 1
+do {
+    r4 = 1
+    do {
+        if r2 * r4 == 10551314
+            r0 += r2
+        r4 += 1
+    } while r4 <= 10551314
+
+    r2 += 1
+} while r2 <= r5
